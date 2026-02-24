@@ -27,6 +27,18 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
+      - name: Restore tests
+        working-directory: backend.Tests
+        run: dotnet restore
+
+      - name: Build tests
+        working-directory: backend.Tests
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test
+        working-directory: backend.Tests
+        run: dotnet test --no-build --configuration Release
+
   # ── Frontend: lint & build ───────────────────────────────────
   ci-frontend:
     name: Build frontend (Vite/React)
