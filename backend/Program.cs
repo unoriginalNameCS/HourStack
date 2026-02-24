@@ -6,6 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// CORS — allow the Azure Static Web App frontend
+builder.Services.AddCors(options =>
+    options.AddDefaultPolicy(policy =>
+        policy.WithOrigins(
+                builder.Configuration["AllowedOrigins"]?.Split(',') ?? []
+              )
+              .AllowAnyMethod()
+              .AllowAnyHeader()));
+
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config => {
@@ -15,6 +24,8 @@ builder.Services.AddOpenApiDocument(config => {
 });
 
 var app = builder.Build();
+
+app.UseCors();
 
 // Auto-run migrations on startup (relational only — skipped in tests)
 using (var scope = app.Services.CreateScope())
@@ -32,7 +43,7 @@ if (app.Environment.IsDevelopment())
     app.UseOpenApi();
     app.UseSwaggerUi(config =>
     {
-        config.DocumentTitle = "TodoAPI";
+        config.DocumentTitle = "HourStack";
         config.Path = "/swagger";
         config.DocumentPath = "/swagger/{documentName}/swagger.json";
         config.DocExpansion = "list";

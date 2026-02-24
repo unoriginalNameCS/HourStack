@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
-const API = "/time-entries";
+const API = `${import.meta.env.VITE_API_URL ?? ""}/time-entries`;
 
 const emptyForm = { date: "", quantity: "", multiplier: "1", notes: "" };
 
