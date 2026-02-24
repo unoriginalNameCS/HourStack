@@ -3,7 +3,7 @@ import "./App.css";
 
 const API = "/time-entries";
 
-const emptyForm = { date: "", quantity: "", notes: "" };
+const emptyForm = { date: "", quantity: "", multiplier: "1", notes: "" };
 
 function App() {
   const [entries, setEntries] = useState([]);
@@ -39,6 +39,7 @@ function App() {
     const payload = {
       date: form.date,
       quantity: parseFloat(form.quantity),
+      multiplier: parseFloat(form.multiplier) || 1,
       notes: form.notes || null,
     };
     try {
@@ -70,6 +71,7 @@ function App() {
     setForm({
       date: entry.date,
       quantity: String(entry.quantity),
+      multiplier: String(entry.multiplier ?? 1),
       notes: entry.notes ?? "",
     });
   }
@@ -91,7 +93,8 @@ function App() {
   }
 
   const totalHours = entries.reduce((sum, e) => sum + e.quantity, 0);
-  const totalToBePaid = totalHours * 55;
+  const totalToBePaid =
+    entries.reduce((sum, e) => sum + e.quantity * (e.multiplier ?? 1), 0) * 55;
   return (
     <div className="dashboard">
       <header className="dashboard-header">
@@ -118,6 +121,19 @@ function App() {
               name="date"
               value={form.date}
               onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            Multiplier
+            <input
+              type="number"
+              name="multiplier"
+              value={form.multiplier}
+              onChange={handleChange}
+              min="1"
+              step="0.5"
+              placeholder="1"
               required
             />
           </label>
@@ -172,7 +188,8 @@ function App() {
             <thead>
               <tr>
                 <th>Date</th>
-                <th>Quantity (hrs)</th>
+                <th>Quantity (hours)</th>
+                <th>Multipler</th>
                 <th>Notes</th>
                 <th>Actions</th>
               </tr>
@@ -185,6 +202,7 @@ function App() {
                 >
                   <td>{entry.date}</td>
                   <td>{entry.quantity.toFixed(2)}</td>
+                  <td>{entry.multiplier ?? 1}x</td>
                   <td>{entry.notes ?? "—"}</td>
                   <td className="actions-cell">
                     <button
