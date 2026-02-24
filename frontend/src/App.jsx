@@ -5,12 +5,31 @@ const API = "/time-entries";
 
 const emptyForm = { date: "", quantity: "", multiplier: "1", notes: "" };
 
+function ConfirmModal({ message, onConfirm, onCancel }) {
+  return (
+    <div className="modal-overlay">
+      <div className="modal">
+        <p>{message}</p>
+        <div className="modal-actions">
+          <button className="btn-delete" onClick={onConfirm}>
+            Delete
+          </button>
+          <button className="btn-secondary" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [entries, setEntries] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null); // holds id to delete
 
   useEffect(() => {
     fetchEntries();
@@ -82,7 +101,12 @@ function App() {
   }
 
   async function handleDelete(id) {
-    if (!confirm("Delete this entry?")) return;
+    setConfirmDelete(id);
+  }
+
+  async function confirmDeleteEntry() {
+    const id = confirmDelete;
+    setConfirmDelete(null);
     try {
       const res = await fetch(`${API}/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete entry");
@@ -97,6 +121,13 @@ function App() {
     entries.reduce((sum, e) => sum + e.quantity * (e.multiplier ?? 1), 0) * 55;
   return (
     <div className="dashboard">
+      {confirmDelete !== null && (
+        <ConfirmModal
+          message="Are you sure you want to delete this entry?"
+          onConfirm={confirmDeleteEntry}
+          onCancel={() => setConfirmDelete(null)}
+        />
+      )}
       <header className="dashboard-header">
         <h1>HourStack</h1>
         <span className="total-badge">{totalHours.toFixed(2)} hrs total</span>
