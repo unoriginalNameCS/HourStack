@@ -76,6 +76,7 @@ app.MapPut("/time-entries/{id}", async (int id, TimeEntry updated, AppDbContext 
     entry.Date = updated.Date;
     entry.Quantity = updated.Quantity;
     entry.Notes = updated.Notes;
+    entry.Multiplier = updated.Multiplier;
 
     await db.SaveChangesAsync();
     return Results.Ok(entry);
