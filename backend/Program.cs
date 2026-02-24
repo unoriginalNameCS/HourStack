@@ -16,11 +16,14 @@ builder.Services.AddOpenApiDocument(config => {
 
 var app = builder.Build();
 
-// Auto-run migrations on startup
+// Auto-run migrations on startup (relational only — skipped in tests)
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    if (db.Database.IsRelational())
+        db.Database.Migrate();
+    else
+        db.Database.EnsureCreated();
 }
 
 // Swagger
@@ -101,3 +104,6 @@ app.MapDelete("/time-entries/{id}", async (int id, AppDbContext db) =>
 });
 
 app.Run();
+
+// Expose Program to WebApplicationFactory in tests
+public partial class Program { }
