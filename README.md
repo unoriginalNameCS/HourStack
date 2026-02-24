@@ -1,5 +1,6 @@
 # HourStack
 
+Available at: https://gray-river-014108700.4.azurestaticapps.net
 Simple full-stack app with:
 
 - Backend: .NET
