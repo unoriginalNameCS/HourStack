@@ -50,7 +50,7 @@ app.MapGet("/db-test", async (AppDbContext db) =>
 
 // GET all entries
 app.MapGet("/time-entries", async (AppDbContext db) =>
-    await db.TimeEntries.OrderByDescending(e => e.StartTime).ToListAsync());
+    await db.TimeEntries.OrderByDescending(e => e.Date).ToListAsync());
 
 // GET single entry
 app.MapGet("/time-entries/{id}", async (int id, AppDbContext db) =>
@@ -62,7 +62,6 @@ app.MapGet("/time-entries/{id}", async (int id, AppDbContext db) =>
 // POST create entry
 app.MapPost("/time-entries", async (TimeEntry entry, AppDbContext db) =>
 {
-    entry.CreatedAt = DateTime.UtcNow;
     db.TimeEntries.Add(entry);
     await db.SaveChangesAsync();
     return Results.Created($"/time-entries/{entry.Id}", entry);
@@ -74,9 +73,8 @@ app.MapPut("/time-entries/{id}", async (int id, TimeEntry updated, AppDbContext 
     var entry = await db.TimeEntries.FindAsync(id);
     if (entry is null) return Results.NotFound();
 
-    entry.Title = updated.Title;
-    entry.StartTime = updated.StartTime;
-    entry.EndTime = updated.EndTime;
+    entry.Date = updated.Date;
+    entry.Quantity = updated.Quantity;
     entry.Notes = updated.Notes;
 
     await db.SaveChangesAsync();
