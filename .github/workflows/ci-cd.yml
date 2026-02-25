@@ -97,13 +97,6 @@ jobs:
               { "name": "AllowedOrigins", "value": "https://gray-river-014108700.4.azurestaticapps.net", "slotSetting": false }
             ]
 
-      - name: Set startup command
-        run: |
-          az webapp config set \
-            --name ${{ secrets.AZURE_WEBAPP_NAME }} \
-            --resource-group hourstack-rg \
-            --startup-file "dotnet backend.dll"
-
       - name: Deploy to Azure App Service
         run: |
           cd ./publish
