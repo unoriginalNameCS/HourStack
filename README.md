@@ -47,7 +47,6 @@ hourstack/
 │   ├── appsettings.Development.json
 │   ├── backend.csproj
 │   ├── Dockerfile
-│   ├── fly.toml
 │   ├── Program.cs
 │   └── ...
 ├── backend.Tests/
