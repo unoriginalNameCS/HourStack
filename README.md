@@ -44,7 +44,6 @@ hourstack/
 │   ├── Migrations/
 │   ├── Models/
 │   ├── appsettings.json
-│   ├── appsettings.Development.json
 │   ├── backend.csproj
 │   ├── Dockerfile
 │   ├── Program.cs

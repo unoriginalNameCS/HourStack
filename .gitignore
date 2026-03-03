@@ -60,3 +60,13 @@ lerna-debug.log*
 
 # Optional local config files
 *.local
+
+# Secrets — never commit connection strings
+appsettings.Development.json
+
+# Publish output
+**/publish/
+
+# Stray binaries
+*.dll
+*.exe
