@@ -61,6 +61,10 @@ lerna-debug.log*
 # Optional local config files
 *.local
 
+# Build artifacts
+**/publish/
+*.zip
+
 # Secrets — never commit connection strings
 appsettings.Development.json
 
