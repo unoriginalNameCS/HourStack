@@ -116,9 +116,10 @@ function App() {
     }
   }
 
-  const totalHours = entries.reduce((sum, e) => sum + e.quantity, 0);
-  const totalToBePaid =
-    entries.reduce((sum, e) => sum + e.quantity * (e.multiplier ?? 1), 0) * 55;
+  const totalHours = entries.reduce(
+    (sum, e) => sum + e.quantity * e.multiplier,
+    0,
+  );
   return (
     <div className="dashboard">
       {confirmDelete !== null && (
@@ -130,10 +131,7 @@ function App() {
       )}
       <header className="dashboard-header">
         <h1>HourStack</h1>
-        <span className="total-badge">{totalHours.toFixed(2)} hrs total</span>
-        <span className="total-badge">
-          ${totalToBePaid ? totalToBePaid : 0}
-        </span>
+        <span className="total-badge">{totalHours.toFixed(2)} hours total</span>
       </header>
 
       {error && (

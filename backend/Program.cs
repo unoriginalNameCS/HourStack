@@ -88,7 +88,7 @@ app.MapPost("/time-entries", async (TimeEntry entry, AppDbContext db) =>
     return Results.Created($"/time-entries/{entry.Id}", entry);
 });
 
-// PUT update entry (e.g. set EndTime to stop a running timer)
+// PUT update entry 
 app.MapPut("/time-entries/{id}", async (int id, TimeEntry updated, AppDbContext db) =>
 {
     var entry = await db.TimeEntries.FindAsync(id);
